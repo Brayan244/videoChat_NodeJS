@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="fontawesome-free-5.0.6/web-fonts-with-css/css/fontawesome.min.css">
+        <script src="js/jquery-3.2.1.slim.min.js"></script>
+        <link rel="stylesheet" href="css/estilosPrincipal.css">
+        <link rel="stylesheet" href="css/estiloModalPerfil.css">
+        <script type=" text/javascript" src="js/scritp.js"> </script>
+
+        <script>
+            $(document).ready(function(){
+                $('[data-toggle="tooltip"]').tooltip();   
+            });
+            </script>
+
+        <title>NOMBRE DE LA PAGINA</title>
+    </head>
+
+    <body class="body">
+
+        <!-- DE NAVBAR-->
+        <nav class="navv navbar navbar-expand-lg navbar-dark navLogo">
+                <a class=" navbar-brand" href="#">
+                    <!--<img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png" width="100" height="80" alt "">-->
+                    <span class="lead">
+                        <strong> ComuniK2 </strong>
+                    </span>
+                </a>
+                <!-- boton de configuración, aparece al hacer pequeña la pantalla-->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+        
+                <!--DROPDOWN MENU-->
+                <!--ML-auto para alinear a la derecha-->
+                <div class="collapse navbar-collapse pull-md-right" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto">
+                        <a href="#">
+                            <button class="btn" data-toggle="modal" data-target="#Info"> Sobre Nosotros </button>
+                        </a>
+                        <div class="hola" > </div>
+                        <a href="iniciosesion.html"> 
+                            <button class="btn" > Cerrar Sesion </button>
+                        </a>
+                    </ul>
+                   
+                </div>
+            </nav>
+
+<div class="row">
+                <div class="col-md-3 borde"> 
+                    <div class="fondo1">
+                        <div class="conver converActiva">
+                            <h6 class="converNombre"> Mildred</h6>
+                        </div>
+                        <div class="conver">
+                                <h6 class="converNombre"> Diana  </h6>
+                            </div>
+                            <div class="conver">
+                                    <h6 class="converNombre"> Raquel <span class="badge badge-secondary"> 4 </span></h6>
+                                </div>
+                                <div class="conver">
+                                        <h6 class="converNombre"> Ariel </h6>
+                                    </div>
+                    </div>
+                </div>
+                <div class="col-md-6 borde">
+                   <div class="fondo2_1">
+                        <div class="chatPerfil">
+                        <a href="" data-toggle="modal" data-target="#perfilotro" > <h6 class="chatPerfilNombre"> Mildred </h6> </a>
+                        <p class="chatPerfilMensaje" align="right"> "Los amo a todos :*" </p>
+                        <img class="chatPerfilImagen" src="imagenes/imagen-para-perfil.jpg" height="70px" width="70px" alt=""> 
+                        </div>
+                        
+                   </div>
+                   <div class="fondo2_2">
+                    <div class="botonExtras">
+                            <button class="extra" type="button" data-toggle="collapse" data-target="#Extras" aria-expanded="false" aria-controls="collapseExample">
+                                    <i class="fa fa-chevron-up"></i>
+                                </button>
+                    </div>
+                    <div class="mensaje input-group">
+                            <textarea class="form-control input" placeholder="Escribe tu mensaje aquí..."></textarea>
+
+                            <div class="input-group-prepend">
+                                    <button type="button" class="input form-control"> Enviar</button>
+                                </div>
+                          </div>
+                    <div class="collapse in" id="Extras"> 
+                            <div class="extracollapse">
+                                <div class="extracollapsefondo"> </div>
+                                <button class="transparent" data-toggle="modal" data-target="#Correo"> <img class="imagenextra" src="imagenes/correo.png" alt="" height="50px"> </button>
+                                <button class="transparent" data-toggle="modal" data-target="#Adjunto" > <img class="imagenextra" src="imagenes/adjuntar.png" alt="" height="50px"> </button>
+                                <button class="transparent" data-toggle="modal" data-target="#Video" > <img class="imagenextra" src="imagenes/video.png" alt="" height="50px"> </button>
+                                <button class="transparent" data-toggle="modal" data-target="#Juego" > <img class="imagenextra" src="imagenes/juego.png" alt="" height="50px"> </button>
+                            </div>
+                        </div>
+                   </div>
+                   
+                </div>
+                <div class="col-md-3 borde"> 
+                    <div class="fondo3_1">
+                        <div class="row"> 
+                            <div class="col-md-6"> 
+                                <h6 class="perfilnombre"> Dann95 </h6>
+                                <span class="mnsaje">" Mi mensaje... "</span>
+                            </div>
+
+                            <div class="col-md-6"> 
+                                <img class="perfilimagen" src="imagenes/imagen-perfil.jpg" alt="" height="110px">
+                            </div>
+                        </div>
+                        <div class="row"> 
+                            <div class="form-group select">
+                                <select class="form-control estado " id="selectEstado">
+                                <option class="estadoDIS"> Disponible </option>
+                                    <option class="estadoOCU" >Ocupado </option>
+                                <option class="estadoAUS" >Ausente </option>
+                                <option class="estadoDES" >Desconectado </option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" class=" btn miperfil" data-toggle="modal" data-target="#miperfil"> Perfil </button>
+                    </div>
+                    <div class="fondo3_2">
+                        <div class="container lil">
+                            <div class="uus"> 
+                                    <span class="uusNombre"> Juanito </span>
+                                <div class="bolita bolitacolorV"> 
+                                </div>
+                            </div>
+                            <div class="uus"> 
+                                    <span class="uusNombre"> Mariana </span>
+                                <div class="bolita bolitacolorR"> 
+                                </div>
+                            </div>
+                            <div class="uus"> 
+                                    <span class="uusNombre"> Deniss </span>
+                                <div class="bolita bolitacolorA"> 
+                                </div>
+                            </div>
+                            <div class="uus"> 
+                                    <span class="uusNombre"> Rober </span>
+                                <div class="bolita bolitacolorG"> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+</div>
+<!--MODAL PERFIL--> 
+<div class="modal fade" id="miperfil" tabindex = "-1" role="dialog" aria-labelledby="miperfil" aria-hidden="true"> 
+        <div class="modal-dialog" role="document">
+            <div class="modal-content perfil"> 
+                <div class="modal-header nombreperfil"> 
+                    <h5 class="nombrepp"> Mi Perfil </h5>
+                </div>
+                <div class="modal-body"> 
+                    <div class="row"> 
+                        <div class="col-md-7 lol"> 
+                            <div class="gray uno">
+                                <div class="row"> 
+                                    <div class="col-md-6 arriba">
+                                            <div class="centro"> 
+                                                    <span class="text"> Informacion Personal </span>
+                                                </div>
+                                            <div class="centro">
+                                                    <span class="text2"> Dann95 </span>
+                                            </div>                                
+                                            <div class="centro">
+                                                    <span class="text2"> dann_95@hotmail.com </span>
+                                            </div>      
+                                            <div class="centro">
+                                                    <span class="text2"> Mi mensaje... </span>
+                                            </div> 
+                                    </div>
+                                    <div class="col-md-6" align="right">
+                                            <div class="">
+                                                    <img class="imagen" src="imagenes/imagen-perfil.jpg" alt="" height="100px" >
+                                                </div> 
+                                    </div>
+                                </div>
+                                <hr class="hr">
+                                <div class="row"> 
+                                    <div class="col-md-12">
+                                            <div class="centro"> 
+                                                <span class="text"> Preguntas de Seguridad </span>
+                                            </div>
+                                            <div class="centro"> 
+                                                    <span class="text2"> Mi color Favorito: Negro. </span>
+                                            </div>
+                                            <div class="centro"> 
+                                                    <span class="text2"> El nombre de mi primera mascota: Thalia. </span>
+                                                </div>
+
+                                    </div>
+                                </div>
+                                <div class="row"> 
+                                    <div class="col-md-12">
+                                            <div class="centro"> 
+                                                <span class="text"> Contraseña </span>
+                                            </div>
+                                            <div class="centro"> 
+                                                    <span class="text2"> gatitos01 </span>
+                                            </div>
+                                    </div>
+                                </div>
+                                <div class="botoneditar" align="right"> 
+                                    <button type="button" class="btn editar"> Editar </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 lol"> 
+                                <div class="gray dos">
+                                    <div class="nombrejuego"> 
+                                        <h4> PONG-Extremo </h4>
+                                    </div>
+                                    <hr class="hr">
+                                    <div class="trofeo" align="center"> 
+                                        <img class="trofeo" src="imagenes/trofeo.png" alt="" height="110px" data-toggle="tooltip" title="Siguiente Rango: MASTER.">
+                                    </div>
+                                    <br>
+                                    <div class="puntuacion" align="center"> 
+                                        <span class="punt" data-toggle="tooltip" title="PUNTUACION"> 203, 489</span>
+                                    </div>
+                                    <hr class="hr">
+                                    <div class="logros"> 
+                                            <h6> Logros </h6>
+                                    </div>
+                                    <div class="row"> 
+                                        <div class="col-md-4">
+                                            <img class="logro" src="imagenes/destructor1.png" alt="" height="40px" width="50px" data-toggle="tooltip" title="DESTRUCTOR Nivel1: Lograste destruir 50 bloques Rojos. SIGUIENTE NIVEL: Destruye 100 Bloques Rojos."> 
+                                        </div>
+                                        <div class="col-md-4">
+                                                <img class="logro" src="imagenes/amigable3.png" alt=""height="40px" width="50px" data-toggle="tooltip" title="AMIGABLE Nivel3: Lograste jugar con 10 usuarios diferentes. ¡FELICIDADES!"> 
+
+                                        </div>
+                                        <div class="col-md-4">
+                                                <img class="logro" src="imagenes/campeon2.png" alt="" height="40px" width="50px" data-toggle="tooltip" title="CAMPEON Nivel2: Lograste ganar 50 partidas. SIGUIENTE NIVEL: Gana 100 partidas."> 
+
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<!--MODAL PERFIL OTRO USUARIO --> 
+<div class="modal fade" id="perfilotro" tabindex = "-1" role="dialog" aria-labelledby="miperfil" aria-hidden="true"> 
+    <div class="modal-dialog" role="document">
+        <div class="modal-content perfil"> 
+            <div class="modal-header nombreperfil"> 
+                <h5 class="nombrepp"> Perfil de Mildred </h5>
+            </div>
+            <div class="modal-body"> 
+                <div class="row"> 
+                    <div class="col-md-7 lol"> 
+                        <div class="gray uno">
+                            <div class="row"> 
+                                <div class="col-md-6 arriba otrop">
+                                        <div class="centro"> 
+                                                <span class="text"> Informacion Personal </span>
+                                            </div>
+                                        <div class="centro">
+                                                <span class="text2"> Mildred  </span>
+                                        </div>                                
+                                        <div class="centro">
+                                                <span class="text2"> mildr3d_1@gmail.com </span>
+                                        </div>      
+                                        <div class="centro">
+                                                <span class="text2"> "Los amo a todos :*" </span>
+                                        </div> 
+                                </div>
+                                <div class="col-md-6 otrop" align="right">
+                                        <div class="">
+                                                <img class="imagen" src="imagenes/imagen-para-perfil.jpg" alt="" height="100px" >
+                                            </div> 
+                                </div>
+                            </div>
+                          
+                        </div>
+                    </div>
+                    <div class="col-md-5 lol"> 
+                            <div class="gray dos">
+                                <div class="nombrejuego"> 
+                                    <h4> PONG-Extremo </h4>
+                                </div>
+                                <hr class="hr">
+                                <div class="trofeo" align="center"> 
+                                    <img class="trofeo" src="imagenes/trofeo0.png" alt="" height="110px" data-toggle="tooltip" title="Siguiente Rango: BRONCE">
+                                </div>
+                                <br>
+                                <div class="puntuacion" align="center"> 
+                                    <span class="punt" data-toggle="tooltip" title="PUNTUACION"> 3, 129 </span>
+                                </div>
+                                <hr class="hr">
+                                <div class="logros"> 
+                                        <h6> Logros </h6>
+                                </div>
+                                <div class="row"> 
+                                    <div class="col-md-4">
+                                        <img class="logro" src="imagenes/destructor0.png" alt="" height="40px" width="50px" data-toggle="tooltip" title="DESTRUCTOR Nivel1: Lograste destruir 10 bloques Rojos. SIGUIENTE NIVEL: Destruye 50 Bloques Rojos."> 
+                                    </div>
+                                    <div class="col-md-4">
+                                            <img class="logro" src="imagenes/amigable0.png" alt=""height="40px" width="50px" data-toggle="tooltip" title="AMIGABLE Nivel0: Lograste jugar tu primer partida. SIGUIENTE NIVEL: Juega con 3 usuarios diferentes. "> 
+
+                                    </div>
+                                    <div class="col-md-4">
+                                            <img class="logro" src="imagenes/campeon.png" alt="" height="40px" width="50px" data-toggle="tooltip" title="¡Gana tu primer partida!"> 
+
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL PERFIL--> <!--AÑSLDKJFAÑDSKJFAÑSLKJDF-->
+<div class="modal fade" id="Correo" tabindex = "-1" role="dialog" aria-labelledby="perfil" aria-hidden="true"> 
+    <div class="modal-dialog" role="document">
+        <div class="modal-content"> 
+            <div class="modal-body"> 
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL PERFIL--> <!--AÑSLDKJFAÑDSKJFAÑSLKJDF-->
+<div class="modal fade" id="perfil" tabindex = "-1" role="dialog" aria-labelledby="perfil" aria-hidden="true"> 
+    <div class="modal-dialog" role="document">
+        <div class="modal-content"> 
+            <div class="modal-header"> 
+
+            </div>
+            <div class="modal-body"> 
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- MODAL INFO -->
+<div class="modal fade" id="Info" tabindex "-1" role="dialog" aria-labelledby="Info" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content info">
+                <div class="modal-header">
+                    <h4 class="modal-tittle"> BDM - Proyecto Final. </h4>
+                </div>
+                <div class="modal-body" align="center">
+                    <h6> Universidad Autonoma de Nuevo León. </h6>
+                    <h6> Facultad de Ciencias Fisico Matemáticas. </h6>
+                    <h6> Lic. Multimedia y Animación Digital. </h6>
+                    <br>
+                    <h5> Programación Orientada a Internet </h5>
+                    <h5> Proyecto Final. </h5>
+                    <br>
+                    <h6> EQUIPO </h6>
+                    <p> PROGRAMADOR BASE DE DATOS : Brayan.</p>
+                    <p> PROGRAMADOR WEB: Daniela Cantú.</p>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="js/jquery-3.2.1.slim.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+    </body>
+
+
+  </html>

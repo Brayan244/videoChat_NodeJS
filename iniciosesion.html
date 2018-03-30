@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" >
+    <link rel="stylesheet" href="css/estilosInicio.css">
+    <script type=" text/javascript" src="js/scritp.js"> </script>
+    <title>COMUNIK2</title>
+</head>
+
+<body class="color2" id="body">
+
+    <!--INTENTO DE NAVBAR-->
+    <nav class="navv navbar navbar-expand-lg navbar-dark navLogo">
+
+        <a class=" navbar-brand" href="#">
+           <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png" width="100" height="80" alt "">-->
+            <span class="lead">
+                <strong> ComuniK2 </strong>
+            </span>
+        </a>
+
+        <!-- boton de configuración, aparece al hacer pequeña la pantalla-->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!--DROPDOWN MENU-->
+        <!--ML-auto para alinear a la derecha-->
+        <div class="collapse navbar-collapse pull-md-right" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <a href="#">
+                    <button class="btn" data-toggle="modal" data-target="#Info"> Sobre Nosotros </button>
+                </a>
+            </ul>
+        </div>
+
+    </nav>
+    <br>
+    <br>
+    <!-- MODAL INFO -->
+    <div class="modal fade" id="Info" tabindex "-1" role="dialog" aria-labelledby="Info" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content info">
+                <div class="modal-header">
+                    <h4 class="modal-tittle"> BDM - Proyecto Final. </h4>
+                </div>
+                <div class="modal-body" align="center">
+                    <h6> Universidad Autonoma de Nuevo León. </h6>
+                    <h6> Facultad de Ciencias Fisico Matemáticas. </h6>
+                    <h6> Lic. Multimedia y Animación Digital. </h6>
+                    <br>
+                    <h5> Programación Orientada a Internet </h5>
+                    <h5> Proyecto Final. </h5>
+                    <br>
+                    <h6> EQUIPO </h6>
+                    <p> PROGRAMADOR BASE DE DATOS : Brayan.</p>
+                    <p> PROGRAMADOR WEB: Daniela Cantú.</p>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--INICIO DE SESION-->
+    <div class="container formulario" id="contenedor">
+        <div class="row">
+            <div class="col-md-12" align="center">
+                <fieldset class="fieldset">
+                    <form class="form">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text inputtext" id="basic-addon1">@</span>
+                            </div>
+                            <input type="text" class="form-control input" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text inputtext" id="basic-addon1">Contraseña</span>
+                            </div>
+                            <input type="password" class="form-control input" aria-describedby="basic-addon1">
+                        </div>
+                    </form>
+                    <br>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-outline-secondary btn-block">
+                            <a class="white" href="paginaprincipal.html"> INICIAR SESION </a>
+                        </button>
+                </fieldset>
+                </div>
+            </div>
+
+            <nav class="navv navbar navbar-expand-lg navbar-light ">
+                <!-- boton de configuración, aparece al hacer pequeña la pantalla-->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarExtra" aria-controls="navbarExtra"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar2 collapse navbar-collapse" id="navbarExtra">
+                    <ul class="navbar-nav mt-2 mt-lg-0 navbar-center">
+                        <li class="nav-item active white">
+                            <a class="white nav-link" href="#">
+                                <button class="btn white" data-toggle="modal" data-target="#Olvido"> Olvide la contraseña </button>
+                            </a>
+                        </li>
+                        <li class="nav-item active white">
+                            <a class="white nav-link" href="#">
+                                <button class="btn white" data-toggle="modal" data-target="#Registro"> Registrarme </button>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <!--MODAL1 de REGISTRO USUARIO/CONTRASEÑA-->
+        <div class="modal fade" id="Registro" tabindex="-1" role="dialog" aria-labelledby="Registro" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header olvidoTitulo">
+                        <h4 class="modal-title" id="RegistroH">Registro</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body olvido">
+                        <div class="carousel1">
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-10">
+                                    <div class="foto">
+                                        <h4 class="white"> Imagen de Perfil: </h4>
+                                        <div align="center">
+                                            <img class "=fotomodal3" src="imagenes/imagen-para-perfil.jpg" height="100px" alt="">
+                                        </div>
+                                        <br>
+                                        <div align="center" class="bro">
+                                            <input type="file" id="browse">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <hr noshade>
+                                    <br>
+                                    <div class="perfil">
+                                        <h4 class="white"> Información Personal </h4>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text inputtext"> Nombre de Usuario
+                                                    <small> (Alias) </small>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control input" aria-label="Username" aria-describedby="basic-addon1">
+                                        </div>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text inputtext" id="basic-addon1"> @ </span>
+                                            </div>
+                                            <input type="text" class="form-control input" placeholder="email@ejemplo.com" aria-label="email" aria-describedby="basic-addon1">
+                                        </div>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text inputtext" id="basic-addon1"> Mensaje de Perfil </span>
+                                            </div>
+                                            <input type="text" class="form-control input" aria-describedby="basic-addon1">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <hr noshade>
+                                    <br>
+                                    <div class="Contraseña">
+                                        <h4 class="white"> Seguridad de la Cuenta </h4>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text inputtext" id="basic-addon1">Contraseña </span>
+                                            </div>
+                                            <input type="password" class="form-control input" aria-label="password" aria-describedby="basic-addon1" id="inputContraseña">
+                                        </div>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text inputtext" id="basic-addon1">Confirmar contraseña </span>
+                                            </div>
+                                            <input type="password" class="form-control input" aria-label="password" aria-describedby="basic-addon1" id="inputConfirmar">
+                                        </div>
+                                        <br>
+                                        <div class="input-group">
+                                            <span class="input-group-text inputtext" id="basic-addon1"> Pregunta 1 </span>
+                                            <select class="form-control input">
+                                                <option>¿Color favorito?</option>
+                                                <option>¿Tu ciudad favorita?</option>
+                                                <option>¿El nombre de tu primera mascota?</option>
+                                                <option>¿Película preferida?</option>
+                                            </select>
+                                            <input type="text " id="pregunta1" class="input">
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-text inputtext" id="basic-addon1"> Pregunta 2 </span>
+                                            <select class="form-control input">
+                                                <option>¿Color favorito?</option>
+                                                <option>¿Tu ciudad favorita?</option>
+                                                <option>¿El nombre de tu primera mascota?</option>
+                                                <option>¿Película preferida?</option>
+                                            </select>
+                                            <input type="text" id="pregunta2" class="input">
+                                        </div>
+                                    </div>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="paginaprincipal.html">
+                                <button class="btn"> REGISTRARME </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--MODAL1 OLVIDO DE CONTRASEÑA-->
+        <div class="modal fade" id="Olvido" tabindex="-1" role="dialog" aria-labelledby="Olvido" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content olvidoTitulo">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Recuperar Contraseña </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body olvido">
+                        <div class="row">
+                            <div class="col-md-1"> </div>
+                            <div class="col-md-10">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text inputtext" id="basic-addon1">@ </span>
+                                    </div>
+                                    <input type="text" class="form-control input " placeholder="email@ejemplo.com" aria-label="email" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="modal-footer">
+                            <button type="button" class="btn" data-toggle="modal" data-target="#recuperarContra2" data-dismiss="modal"> SIGUIENTE </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--MODAL2 OLVIDO DE CONTRASEÑA-->
+        <div class="modal fade" id="recuperarContra2" tabindex="-1" role="dialog" aria-labelledby="recuperarContraseña" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header olvidoTitulo">
+                        <h4 class="modal-title" id="myModalLabel">Recuperar Contraseña </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body olvido">
+                        <div class="row">
+                            <div class="col-md-1"> </div>
+                            <div class="col-md-10">
+                                <div class="">
+                                    <span class="input-group-text inputtext" id="basic-addon1">Pregunta1: </span>
+                                    <span class="input-group-text inputtext" id="basic-addon1">¿El nombre de tu primer mascota?</span>
+                                    <input type="text" class="form-control input" aria-label="email" aria-describedby="basic-addon1">
+                                </div>
+                                <br>
+                                <div class="">
+                                    <span class="input-group-text inputtext" id="basic-addon1">Pregunta2 </span>
+                                    <span class="input-group-text inputtext" id="basic-addon1">¿Tu ciudad favorita? </span>
+                                    <input type="text" class="form-control input" aria-label="email" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="modal-footer">
+                            <button type="button" class="btn" data-toggle="modal" data-target="#cambiarContra" data-dismiss="modal"> SIGUIENTE </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--MODAL3 OLVIDO DE CONTRASEÑA-->
+        <div class="modal fade" id="cambiarContra" tabindex="-1" role="dialog" aria-labelledby="recuperarContraseña" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header olvidoTitulo">
+                        <h4 class="modal-title" id="myModalLabel">Recuperar Contraseña </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body olvido">
+                        <div class="row">
+                            <div class="col-md-1"> </div>
+                            <div class="col-md-10">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text inputtext" id="basic-addon1">Nueva Contraseña</span>
+                                    </div>
+                                    <input type="password" class="form-control input" aria-label="contraseña" aria-describedby="basic-addon1">
+                                </div>
+                                <br>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text inputtext" id="basic-addon1"> Confirmar Contraseña</span>
+                                    </div>
+                                    <input type="password" class="form-control input" aria-label="contraseña" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="modal-footer">
+                            <a href="paginaprincipal.html">
+                                <button class="btn" type="button"> ENTRAR </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="js/jquery-3.2.1.slim.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+
+</body>
+
+
+</html>

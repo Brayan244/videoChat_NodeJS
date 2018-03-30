@@ -1,0 +1,268 @@
+.body {
+    background: rgb(17, 141, 131);
+    }
+.btn{
+    color:white;
+    background: #088A85;
+}
+.navLogo{
+    background: #757575;
+    height: 70px;
+}
+.borde{
+    background: #088A85;
+    height: 670px;
+    border: 4px solid #757575;
+}
+.fondo1{
+    background: rgb(3, 48, 46);
+    height: 656px;
+    margin-top: 6px;
+    margin-right: -6px;
+    margin-left: -3px;
+}
+.fondo2_1{
+    background: #b3b3b3;
+    height: 520px;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+.fondo2_2{
+    background: rgb(15, 117, 109);
+    height: 140px;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+.fondo3_1{
+    height: 215px;
+
+}
+.fondo3_2{
+    background: rgb(3, 48, 46);
+    height: 441px;
+    margin-top: 6px;
+    margin-left: -6px;
+    margin-right: -3px;
+}
+.conver{
+    background: rgb(5, 71, 69);
+    color:white;
+    height: 50px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.conver:hover{
+    background: #088A85;
+    color:black;
+}
+.converNombre{
+    font-size: 20px;
+    position: relative; 
+    top: 13px;
+    left: 45px;
+}
+.converActiva{
+    background: #088A85;
+    border: 3px solid white;
+}
+.badge{
+    background: #00fff2;
+    color: rgb(0, 0, 0);
+    margin-left: 210px;
+    font-size: 20px;
+    border-radius: 40%;
+}
+.chatPerfil{
+    background: rgb(7, 85, 82); 
+    height: 75px;
+}
+.chatPerfilNombre{
+    color:black;
+    font-size: 20px;
+    position: relative;
+    left: 600px;
+    top: 12px;
+}
+.chatPerfilNombre:hover{
+    color:white;
+}
+.chatPerfilMensaje{
+   color: #07e7dce7;
+   background: rgb(14, 54, 53);
+   border-radius: 10px;
+   word-wrap: break-word;
+   margin-right: 100px;
+   margin-left: 525px; 
+   margin-top: 15px;
+}
+.chatPerfilImagen{
+    position:relative; 
+    left: 690px;
+    bottom: 78px;
+    border-radius: 50%;
+    border: 4px outset green;
+}
+.botonExtras{
+    background: rgb(4, 56, 54);
+    height: 30px;
+    color: white;
+}
+.extra{
+    background: transparent;
+    border: none;
+    color: white;
+    width: 50px;
+    margin-left: 355px;
+}
+.extracollapse{
+    background: #0538367c;
+    position:absolute;
+    bottom: 140px;
+    height: 60px;
+    width: 100%;
+}
+.extracollapsefondo{
+    background: #0538367c;
+    position: absolute; 
+    top: 89px;
+    height: 108px;
+    width: 100%; 
+}
+.imagenextra{
+    margin-top: 5px;
+    margin-left: 15px;
+}
+.input{
+    background: transparent;
+    color: white;
+}
+.input:hover{
+    background: #088A85;
+}
+.input:focus{
+    background: transparent;
+    color:white;
+}
+.mensaje{
+margin-top: 15px;    
+}
+.transparent{
+    background: transparent;
+    border: none;
+}
+.perfilnombre{
+    color:black;
+    font-size: 20px;
+    position: relative; 
+    top: 50px;
+    left: 30px;
+}
+.perfilimagen{
+    border: 5px outset green; 
+    border-radius: 30%;
+    position:relative;
+    top: 15px;
+    right: 30px;
+}
+.estado{
+    background: rgb(5, 70, 67);
+    border: none; 
+    color: white; 
+}
+.estado:hover{
+    background: #088A85;
+
+}
+.estado:focus{
+    background: transparent;
+    color:white;
+}
+.estadoDIS{
+    color: rgb(1, 95, 1);
+    background: #088A85;
+}
+.estadoAUS{
+    color:rgb(85, 85, 2);
+    background: #088A85;
+}
+.estadoDES{
+    color:rgb(46, 46, 46);
+    background: #088A85;
+}
+.estadoOCU{
+    color: rgb(141, 2, 2);
+    background: #088A85;
+}
+.select{
+    position: absolute;
+    top: 150px;
+    left: 20px;
+}
+.miperfil{
+    background: rgb(4, 63, 61);
+    color: white;
+    font-size: 18px;
+    border: none;
+    position: absolute;
+    top: 150px;
+    left: 200px;
+}
+.miperfil:hover{
+    background: #088A85;
+    color:white;
+}
+.info{
+    background: rgba(1, 20, 17, 0.8);
+    color:white;
+}
+.bolita{
+    position: absolute;
+    top: 5px;
+    left: 2px;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+}
+.bolitacolorR{
+    background: red;
+}
+.bolitacolorV{
+    background: green;
+}
+.bolitacolorA{
+    background:yellow;
+}
+.bolitacolorG{
+    background:gray;
+}
+.uus{
+    position: relative;
+    margin-top: 5px;
+    width: 100%;
+    color: white;
+}
+.uus:hover{
+    background: #088A85;
+}
+.uusNombre{
+    margin-left: 20px;
+}
+
+.lil{
+    padding-top: 10px;
+}
+.mnsaje{
+    color:#00fff2;
+    background: rgb(4, 63, 61);
+    border-radius: 10px;
+    font-size: 15px;
+    position: relative; 
+    top: 50px;
+    left: 30px;
+}
+.otrop{
+    margin-top: 70px;
+}
+.hola{
+    width: 5px;
+}
