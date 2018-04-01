@@ -1,4 +1,4 @@
-.body {
+body {
     background: rgb(17, 141, 131);
     }
 .btn{
@@ -11,7 +11,7 @@
 }
 .borde{
     background: #088A85;
-    height: 670px;
+   /* height: 670px;*/
     border: 4px solid #757575;
 }
 .fondo1{
@@ -44,22 +44,22 @@
     margin-left: -6px;
     margin-right: -3px;
 }
-.conver{
+.conversation{
     background: rgb(5, 71, 69);
     color:white;
     height: 50px;
     margin-top: 5px;
     margin-bottom: 5px;
 }
-.conver:hover{
+.conversation:hover{
     background: #088A85;
     color:black;
 }
 .converNombre{
     font-size: 20px;
     position: relative; 
-    top: 13px;
-    left: 45px;
+    top: 2%;
+    left: 4%;
 }
 .converActiva{
     background: #088A85;
@@ -74,14 +74,11 @@
 }
 .chatPerfil{
     background: rgb(7, 85, 82); 
-    height: 75px;
+    height: 15%;
 }
 .chatPerfilNombre{
     color:black;
     font-size: 20px;
-    position: relative;
-    left: 600px;
-    top: 12px;
 }
 .chatPerfilNombre:hover{
     color:white;
@@ -91,28 +88,30 @@
    background: rgb(14, 54, 53);
    border-radius: 10px;
    word-wrap: break-word;
-   margin-right: 100px;
-   margin-left: 525px; 
-   margin-top: 15px;
+   text-align: center;
+   /* margin-right: 100px;
+    margin-left: 525px; 
+   margin-top: 15px; */ 
 }
 .chatPerfilImagen{
-    position:relative; 
+    /* position:relative; 
     left: 690px;
-    bottom: 78px;
+    bottom: 78px; */
     border-radius: 50%;
     border: 4px outset green;
 }
 .botonExtras{
     background: rgb(4, 56, 54);
-    height: 30px;
+    /* height: 30px; */
     color: white;
+    align-self: center;
 }
 .extra{
     background: transparent;
     border: none;
     color: white;
     width: 50px;
-    margin-left: 355px;
+
 }
 .extracollapse{
     background: #0538367c;
@@ -158,12 +157,29 @@ margin-top: 15px;
     left: 30px;
 }
 .perfilimagen{
-    border: 5px outset green; 
+    /* border: 5px outset gray;  */
     border-radius: 30%;
     position:relative;
     top: 15px;
     right: 30px;
 }
+
+.bdr-green{
+    border: 5px outset green; 
+}
+
+.bdr-red{
+    border: 5px outset red; 
+}
+
+.bdr-yellow{
+    border: 5px outset yellow; 
+}
+
+.bdr-gray{
+    border: 5px outset gray; 
+}
+
 .estado{
     background: rgb(5, 70, 67);
     border: none; 
