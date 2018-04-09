@@ -1,0 +1,76 @@
+
+.navbar-nav.navbar-center {
+    position: relative;
+    left: 50%;
+    transform: translatex(-50%);
+}
+
+body {
+background: rgb(17, 141, 131);
+}
+
+.formulario{
+    box-shadow: 0px 0px 80px #071910;
+    height: 350px;
+    width: 30%;
+    transition: 2s;
+    margin-top: 30px;
+    background-color: rgb(24, 104, 97);
+}
+.fieldset{
+    width: 90%;
+    margin-top: 70px;
+}
+.input{
+    background: transparent;
+    color: white;
+}
+.input:hover{
+    background: #088A85;
+}
+.input:focus{
+    background: transparent;
+    color:white;
+}
+.inputtext{
+    background: rgb(6, 78, 76);
+    color:white;
+}
+.btn{
+    color:white;
+    background: #088A85;
+}
+.btn:hover{
+    background: rgb(18, 184, 178);
+}
+.white{
+    color:white;
+    display:block;
+}
+.white:hover{
+    color:white;
+}
+.navLogo{
+    background: #757575;
+}
+.info{
+    background: rgba(1, 20, 17, 0.8);
+    color:white;
+}
+.olvido{
+    background: rgba(1, 63, 61, 0.863);
+}
+.olvidoTitulo{
+    background: rgba(5, 156, 151, 0.863);
+    color:white;
+}
+.browse{
+    width: 20px;
+    background: #071910;
+    color:white;
+    margin-left: 100px;
+}
+
+.bro input[type="file"]{
+    color:white;
+}
