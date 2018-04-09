@@ -10,39 +10,93 @@
     <script src="js/jquery-3.2.1.slim.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/js.cookie-2.2.0.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="fontawesome-free-5.0.6/web-fonts-with-css/css/fontawesome.min.css">
+    <!-- <link rel="stylesheet" href="fontawesome-free-5.0.6/web-fonts-with-css/css/fontawesome.min.css"> -->
     <link rel="stylesheet" href="css/estilosPrincipal.css">
     <link rel="stylesheet" href="css/estiloModalPerfil.css">
     <script type=" text/javascript" src="js/scritp.js"> </script>
 
     <script type="text/javascript">
+
+        var socket = io.connect();
+
         $(document).ready(function () {
 
-            
-            $(".conversation").on("click", function(){
+            var $Enviar = $("#btnEnviar");
+            var $chat = $("#Chat");
+            var $conversation = $(".conversation.converActiva");
+            var $mensaje = $("#txtMensaje");
+
+            loadConversation();
+            setInfoByGetParams(socket);
+
+            $Enviar.on("click", e => {
+                e.preventDefault();
                 
+                
+                if($mensaje.val().length < 1)
+                        return;
+
+                var message = $mensaje.val();
+
+                $chat.append('<div class="card bg-primary col-5 mt-2" style="padding:1% !important; color:white;">' + message + '</div>');
+                $mensaje.val('');
+                
+                $chat.animate({scrollTop: $chat[0].scrollHeight}, 200);
+
+                $mensaje.val('');
+
+            });
+
+            $(".conversation").on("click", function () {
+                
+                debugger; 
+                storeConversation();
+
                 $(".conversation").removeClass("converActiva");
                 $(this).addClass("converActiva")
+                $conversation = $(this)
+                
+                loadConversation();
+                
+                
             })
-            
+
             addEstateColor("perfilImagen");
-            
-            $("#selectEstado").on("change", function(){
+
+            $("#selectEstado").on("change", function () {
                 addEstateColor("perfilImagen");
             })
         });
 
-        function addEstateColor(controlName)
+
+        function storeConversation()
         {
-            debugger;
-            var Estate =  $("#selectEstado").val();
-           
+            var conversationName = $(".conversation.converActiva").find("h6").text().trim();
+            var chatHtml = $("#Chat").html().trim();
+            Cookies.set(conversationName, chatHtml);
+        }
+        function loadConversation()
+        {
+            conversationName = $(".conversation.converActiva").find("h6").text().trim();
+            chatHtml = Cookies.get(conversationName);
+
+            if(chatHtml != undefined)
+                $("#Chat").html(chatHtml);
+            else
+                $("#Chat").html('');
+        }
+        function addEstateColor(controlName) {
+          
+            var Estate = $("#selectEstado").val();
+
             removeBorderEstate(controlName);
 
-            switch(Estate)
-            {
+            switch (Estate) {
                 case "g":
                     $("#" + controlName).addClass("bdr-green");
                     break;
@@ -58,12 +112,24 @@
             }
         }
 
-        function removeBorderEstate(controlName)
-        {
+        function removeBorderEstate(controlName) {
             $("#" + controlName).removeClass("bdr-green");
             $("#" + controlName).removeClass("bdr-red");
             $("#" + controlName).removeClass("bdr-yellow");
             $("#" + controlName).removeClass("bdr-gray");
+        }
+
+        function setInfoByGetParams(socket)
+        {
+            debugger;
+            //obteniendo la url para sacar los parametros
+            var url = new URL(window.location.href);
+            
+            var user = url.searchParams.get('Usuario');
+            var id = url.searchParams.get('SocketId');
+            $('#profileName').text(user);
+
+            socket.emit("changeId", {user: user, id:id});
         }
     </script>
 
@@ -128,7 +194,7 @@
                             <div class="row">
                                 <div class="col-4 mt-4">
                                     <a href="" data-toggle="modal" data-target="#perfilotro">
-                                        <h6 class="chatPerfilNombre"> Mildred </h6>
+                                        <h6 id="profileName" class="chatPerfilNombre"> </h6>
                                     </a>
                                 </div>
                                 <div class="col-6 mt-5">
@@ -139,20 +205,25 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="Chat" class="container" style="height: 420px; overflow: auto;">
+                            
+                        </div>
                     </div>
 
                 </div>
+
                 <div class="fondo2_2 row-fluid">
+
                     <div class="botonExtras">
                         <button class="extra mx-auto" type="button" data-toggle="collapse" data-target="#Extras" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fa fa-chevron-up"></i>
                         </button>
                     </div>
                     <div class="mensaje input-group">
-                        <textarea class="form-control input" placeholder="Escribe tu mensaje aquí..."></textarea>
+                        <textarea id="txtMensaje" class="form-control input" placeholder="Escribe tu mensaje aquí..."></textarea>
 
                         <div class="input-group-prepend">
-                            <button type="button" class="input form-control"> Enviar</button>
+                            <button id="btnEnviar" type="button" class="input form-control"> Enviar</button>
                         </div>
                     </div>
                     <div class="collapse in" id="Extras">

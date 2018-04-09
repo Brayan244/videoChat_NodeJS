@@ -7,10 +7,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
+
+    
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.2.1.slim.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+
     <link rel="stylesheet" href="css/bootstrap.min.css" >
     <link rel="stylesheet" href="css/estilosInicio.css">
     <script type=" text/javascript" src="js/scritp.js"> </script>
     <title>COMUNIK2</title>
+
+    <script type="text/javascript">
+        
+        $(document).ready(()=>{
+            
+            debugger;
+            var socket = io.connect();
+
+            $("#btnInicioSesion").on("click", (e) =>{
+                
+               debugger;
+               e.preventDefault(); 
+               
+               var usuario = $("#userName").val();
+               var password = $("#password").val();
+               var id = socket.id;
+               if(usuario.length < 1 || password.length < 1)
+                    return;
+
+               socket.emit("logIn", {user:usuario, password:password, socketId: id});
+            })
+
+            socket.on('redirect', data => window.location.assign(data.page + "?"+ "Usuario=" + data.user + "&SocketId=" + data.socketId ))
+        });
+       
+    </script>
 </head>
 
 <body class="color2" id="body">
@@ -77,21 +113,19 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text inputtext" id="basic-addon1">@</span>
                             </div>
-                            <input type="text" class="form-control input" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                            <input type="text" id="userName" class="form-control input" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
                         </div>
 
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text inputtext" id="basic-addon1">Contraseña</span>
                             </div>
-                            <input type="password" class="form-control input" aria-describedby="basic-addon1">
+                            <input type="password" id="password"class="form-control input" aria-describedby="basic-addon1">
                         </div>
                     </form>
                     <br>
                     <div class="form-group">
-                        <button type="button" class="btn btn-outline-secondary btn-block">
-                            <a class="white" href="paginaprincipal.html"> INICIAR SESION </a>
-                        </button>
+                        <input type="submit" id="btnInicioSesion" class="btn btn-outline-secondary btn-block" value="INICIAR SESION">
                 </fieldset>
                 </div>
             </div>
@@ -331,12 +365,6 @@
         </div>
 
 
-
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="js/jquery-3.2.1.slim.min.js"></script>
-        <script src="js/popper.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
 
 </body>
 
