@@ -18,80 +18,210 @@
     <!-- <link rel="stylesheet" href="fontawesome-free-5.0.6/web-fonts-with-css/css/fontawesome.min.css"> -->
     <link rel="stylesheet" href="css/estilosPrincipal.css">
     <link rel="stylesheet" href="css/estiloModalPerfil.css">
+    <link rel="stylesheet" href="css/estilosInicio.css">
     <script type=" text/javascript" src="js/scritp.js"> </script>
 
     <script type="text/javascript">
 
         var socket = io.connect();
+        var storedConversation = [];
 
         $(document).ready(function () {
 
+
+            var $iniciosesion = $("#divInicioSesion");
+            var $paginaprincipal = $("#divPaginaPrincipal");
             var $Enviar = $("#btnEnviar");
             var $chat = $("#Chat");
             var $conversation = $(".conversation.converActiva");
             var $mensaje = $("#txtMensaje");
+            
+            //----------------------------------Eventos Socket---------------------------------//
 
+            socket.on("get users", (data) => {
+
+                var $Conectados = $("#UsuariosConectados");
+
+                if (data == undefined)
+                    return;
+
+                $Conectados.html('');
+                for (var i = 0; i < data.length; i++) {
+
+                    if (data[i].user != $("#NombrePerfil").html().trim())
+                        $Conectados.append("<div class='uus' ondblclick='addConvesation(this, false)'> <div class='bolita " + getEstateClass(data[i].Estado) + "'></div> <span class='uusNombre'>  " + data[i].user + "</span> </div>");
+                }
+            });
+
+            socket.on('receive message', data => {
+
+                debugger;
+                storeConversation();
+                addConvesation(data.orig, true);
+                var $conversation = searchConversation(data.orig);
+
+                if ($conversation.hasClass("converActiva")) {
+                    $chat.append('<div class="card bg-success col-5 mt-2" style="padding:1% !important; color:white;">' + data.message + '</div>');
+                    $chat.animate({ scrollTop: $chat[0].scrollHeight }, 200);
+                }
+                else {
+                    $conversation.find("h6").css("margin-left","5%");
+                    $conversation.prepend("<div class='bolita bolitacolorR' style='margin-top:2% !important; margin-left:5% !important;'></div>")
+                    storedConversation.push(data);
+                }
+
+
+            });
+
+            //----------------------------------Eventos DOM------------------------------------//
             loadConversation();
-            setInfoByGetParams(socket);
+            $paginaprincipal.hide();
 
             $Enviar.on("click", e => {
                 e.preventDefault();
-                
-                
-                if($mensaje.val().length < 1)
-                        return;
+
+                if ($mensaje.val().length < 1)
+                    return;
 
                 var message = $mensaje.val();
+                var orig = $("#NombrePerfil").html().trim();
+                var dst = $(".conversation.converActiva").find("h6").text().trim();
 
-                $chat.append('<div class="card bg-primary col-5 mt-2" style="padding:1% !important; color:white;">' + message + '</div>');
-                $mensaje.val('');
+                if (dst == undefined)
+                    return;
                 
-                $chat.animate({scrollTop: $chat[0].scrollHeight}, 200);
 
+                socket.emit('send message', { dst: dst, orig: orig, msg: message });
+                $chat.append('<div class="card bg-primary col-5 mt-2" style="padding:1% !important; color:white;">' + message + '</div>');
+                $chat.animate({ scrollTop: $chat[0].scrollHeight }, 200);
                 $mensaje.val('');
 
             });
 
-            $(".conversation").on("click", function () {
-                
-                debugger; 
-                storeConversation();
+            $("#btnInicioSesion").on("click", (e) => {
 
-                $(".conversation").removeClass("converActiva");
-                $(this).addClass("converActiva")
-                $conversation = $(this)
-                
-                loadConversation();
-                
-                
+
+                e.preventDefault();
+
+                var usuario = $("#userName").val();
+                var password = $("#password").val();
+                var estado = $("#selectEstado").val();
+                var $NombrePerfil = $("#NombrePerfil");
+                var id = socket.id;
+                if (usuario.length < 1 || password.length < 1)
+                    return;
+
+                try {
+                    socket.emit("log-In", { user: usuario, password: password, socketId: id, Estado: estado });
+
+                }
+                catch (Exception) {
+
+                }
+
+                $NombrePerfil.html(usuario);
+                $iniciosesion.hide();
+                $paginaprincipal.show();
             })
 
             addEstateColor("perfilImagen");
 
-            $("#selectEstado").on("change", function () {
+            $("#selectEstado").on("change", () => {
+
+
                 addEstateColor("perfilImagen");
+
+                var userName = $("#NombrePerfil").html();
+                var estado = $("#selectEstado").val();
+                socket.emit("update state", { user: userName, Estado: estado });
             })
+
+
         });
 
 
-        function storeConversation()
-        {
+
+        function searchConversation(contact) {
+            var list = $(".conversation").find("h6");
+
+            for (var i = 0; i < list.length; i++) {
+                if ($(list[i]).html().trim() == contact)
+                    return $(list[i]).parent();
+            }
+        }
+
+        function selectConversation(conversation) {
+
+            var $chat = $("#Chat");
+            storeConversation();
+            var conversationName = $(conversation).find("h6").html();
+            $(".conversation").removeClass("converActiva");
+            $(conversation).addClass("converActiva")
+          // $conversation = $(conversation)
+            $("#profileName").html(conversationName);
+            $chat.html('');
+            loadConversation();
+
+            for(var i = 0; i < storedConversation.length; i++)
+            {
+                if(storedConversation[i].orig == conversationName)
+                {
+                    $chat.append('<div class="card bg-success col-5 mt-2" style="padding:1% !important; color:white;">' + storedConversation[i].message + '</div>');
+                    $chat.animate({ scrollTop: $chat[0].scrollHeight }, 200);
+                }
+            }
+            
+           debugger;
+           storedConversation = storedConversation.filter(e => e.orig != conversationName);
+        }
+
+        function addConvesation(contact, porNombre) {
+
+            debugger;
+            var $panel = $("#conversationPanel");
+
+            var name = "";
+            if (porNombre)
+                name = contact;
+            else
+                name = $(contact).find("span").html();
+
+            var conversations = $panel.find("h6");
+
+            for (var i = 0; i < conversations.length; i++) {
+                if (name.trim() == $(conversations[i]).html().trim() || name.trim() == $("#NombrePerfil").html().trim)
+                    return;
+            }
+
+            if (porNombre) {
+                $panel.append("<div class='conversation' onclick='selectConversation(this)'><h6 class='converNombre'>" + name + "</h6></div>");
+            }
+            else {
+                $panel.find(".conversation").removeClass("converActiva");
+                $("#profileName").html(name);
+                $panel.append("<div class='conversation converActiva' onclick='selectConversation(this)'><h6 class='converNombre'>" + name + "</h6></div>");
+            }
+
+        }
+
+        function storeConversation() {
             var conversationName = $(".conversation.converActiva").find("h6").text().trim();
             var chatHtml = $("#Chat").html().trim();
             Cookies.set(conversationName, chatHtml);
         }
-        function loadConversation()
-        {
+
+        function loadConversation() {
             conversationName = $(".conversation.converActiva").find("h6").text().trim();
             chatHtml = Cookies.get(conversationName);
 
-            if(chatHtml != undefined)
+            if (chatHtml != undefined)
                 $("#Chat").html(chatHtml);
             else
                 $("#Chat").html('');
         }
+
         function addEstateColor(controlName) {
-          
+
             var Estate = $("#selectEstado").val();
 
             removeBorderEstate(controlName);
@@ -119,230 +249,530 @@
             $("#" + controlName).removeClass("bdr-gray");
         }
 
-        function setInfoByGetParams(socket)
-        {
-            debugger;
-            //obteniendo la url para sacar los parametros
-            var url = new URL(window.location.href);
-            
-            var user = url.searchParams.get('Usuario');
-            var id = url.searchParams.get('SocketId');
-            $('#profileName').text(user);
+        function getEstateClass(Estate) {
 
-            socket.emit("changeId", {user: user, id:id});
+            switch (Estate) {
+                case "g":
+                    return "bolitacolorV";
+                    break;
+                case "r":
+                    return "bolitacolorR";
+                    break;
+                case "y":
+                    return "bolitacolorA";
+                    break;
+                case "w":
+                    return "bolitacolorG";
+                    break;
+            }
         }
+
     </script>
 
 </head>
 
 <body>
+    <div id="divInicioSesion" style="padding: 0% !important">
+        <!--INTENTO DE NAVBAR-->
+        <nav class="navv navbar navbar-expand-lg navbar-dark navLogo">
 
+            <a class=" navbar-brand" href="#">
+                <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png" width="100" height="80" alt "">-->
+                <span class="lead">
+                    <strong> ComuniK2 </strong>
+                </span>
+            </a>
 
-    <nav class="navv navbar navbar-expand-lg navbar-dark navLogo col-sm-12">
-        <a class=" navbar-brand" href="#">
-            <!--<img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png" width="100" height="80" alt "">-->
-            <span class="lead">
-                <strong> ComuniK2 </strong>
-            </span>
-        </a>
-        <!-- boton de configuración, aparece al hacer pequeña la pantalla-->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-            aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <!-- boton de configuración, aparece al hacer pequeña la pantalla-->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <!--DROPDOWN MENU-->
-        <!--ML-auto para alinear a la derecha-->
-        <div class="collapse navbar-collapse pull-md-right" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-                <a href="#">
-                    <button class="btn" data-toggle="modal" data-target="#Info"> Sobre Nosotros </button>
-                </a>
-                <div class="hola"> </div>
-                <a href="iniciosesion.html">
-                    <button class="btn"> Cerrar Sesion </button>
-                </a </ul>
+            <!--DROPDOWN MENU-->
+            <!--ML-auto para alinear a la derecha-->
+            <div class="collapse navbar-collapse pull-md-right" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <a href="#">
+                        <button class="btn" data-toggle="modal" data-target="#Info"> Sobre Nosotros </button>
+                    </a>
+                </ul>
+            </div>
 
-        </div>
-    </nav>
-
-
-    <div class="container-fluid mt-2">
-        <div class="row h-100 ">
-
-
-            <div class="col-3 h-100 borde">
-                <div class="fondo1">
-                    <div class="conversation converActiva">
-                        <h6 class="converNombre"> Mildred</h6>
+        </nav>
+        <br>
+        <br>
+        <!-- MODAL INFO -->
+        <div class="modal fade" id="Info" tabindex "-1" role="dialog" aria-labelledby="Info" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content info">
+                    <div class="modal-header">
+                        <h4 class="modal-tittle"> BDM - Proyecto Final. </h4>
                     </div>
-                    <div class="conversation">
-                        <h6 class="converNombre"> Diana </h6>
-                    </div>
-                    <div class="conversation">
-                        <h6 class="converNombre"> Raquel</h6>
-                    </div>
-                    <div class="conversation">
-                        <h6 class="converNombre"> Ariel </h6>
+                    <div class="modal-body" align="center">
+                        <h6> Universidad Autonoma de Nuevo León. </h6>
+                        <h6> Facultad de Ciencias Fisico Matemáticas. </h6>
+                        <h6> Lic. Multimedia y Animación Digital. </h6>
+                        <br>
+                        <h5> Programación Orientada a Internet </h5>
+                        <h5> Proyecto Final. </h5>
+                        <br>
+                        <h6> EQUIPO </h6>
+                        <p> PROGRAMADOR BASE DE DATOS : Brayan.</p>
+                        <p> PROGRAMADOR WEB: Daniela Cantú.</p>
+                        <br>
                     </div>
                 </div>
             </div>
-            <div class="col-6 h-100 borde no-gutters">
-                <div class="fondo2_1">
-                    <div class="chatPerfil">
-                        <div class="container">
+        </div>
+        <!--INICIO DE SESION-->
+        <div class="container formulario" id="contenedor">
+            <div class="row">
+                <div class="col-md-12" align="center">
+                    <fieldset class="fieldset">
+                        <form class="form">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text inputtext" id="basic-addon1">@</span>
+                                </div>
+                                <input type="text" id="userName" class="form-control input" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text inputtext" id="basic-addon1">Contraseña</span>
+                                </div>
+                                <input type="password" id="password" class="form-control input" aria-describedby="basic-addon1">
+                            </div>
+                        </form>
+                        <br>
+                        <div class="form-group">
+                            <input type="submit" id="btnInicioSesion" class="btn btn-outline-secondary btn-block" value="INICIAR SESION">
+                    </fieldset>
+                    </div>
+                </div>
+
+                <nav class="navv navbar navbar-expand-lg navbar-light ">
+                    <!-- boton de configuración, aparece al hacer pequeña la pantalla-->
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarExtra" aria-controls="navbarExtra"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar2 collapse navbar-collapse" id="navbarExtra">
+                        <ul class="navbar-nav mt-2 mt-lg-0 navbar-center">
+                            <li class="nav-item active white">
+                                <a class="white nav-link" href="#">
+                                    <button class="btn white" data-toggle="modal" data-target="#Olvido"> Olvide la contraseña </button>
+                                </a>
+                            </li>
+                            <li class="nav-item active white">
+                                <a class="white nav-link" href="#">
+                                    <button class="btn white" data-toggle="modal" data-target="#Registro"> Registrarme </button>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+
+            <!--MODAL1 de REGISTRO USUARIO/CONTRASEÑA-->
+            <div class="modal fade" id="Registro" tabindex="-1" role="dialog" aria-labelledby="Registro" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header olvidoTitulo">
+                            <h4 class="modal-title" id="RegistroH">Registro</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body olvido">
+                            <div class="carousel1">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <div class="foto">
+                                            <h4 class="white"> Imagen de Perfil: </h4>
+                                            <div align="center">
+                                                <img class "=fotomodal3" src="imagenes/imagen-para-perfil.jpg" height="100px" alt="">
+                                            </div>
+                                            <br>
+                                            <div align="center" class="bro">
+                                                <input type="file" id="browse">
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <hr noshade>
+                                        <br>
+                                        <div class="perfil">
+                                            <h4 class="white"> Información Personal </h4>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text inputtext"> Nombre de Usuario
+                                                        <small> (Alias) </small>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control input" aria-label="Username" aria-describedby="basic-addon1">
+                                            </div>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text inputtext" id="basic-addon1"> @ </span>
+                                                </div>
+                                                <input type="text" class="form-control input" placeholder="email@ejemplo.com" aria-label="email" aria-describedby="basic-addon1">
+                                            </div>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text inputtext" id="basic-addon1"> Mensaje de Perfil </span>
+                                                </div>
+                                                <input type="text" class="form-control input" aria-describedby="basic-addon1">
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <hr noshade>
+                                        <br>
+                                        <div class="Contraseña">
+                                            <h4 class="white"> Seguridad de la Cuenta </h4>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text inputtext" id="basic-addon1">Contraseña </span>
+                                                </div>
+                                                <input type="password" class="form-control input" aria-label="password" aria-describedby="basic-addon1" id="inputContraseña">
+                                            </div>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text inputtext" id="basic-addon1">Confirmar contraseña </span>
+                                                </div>
+                                                <input type="password" class="form-control input" aria-label="password" aria-describedby="basic-addon1" id="inputConfirmar">
+                                            </div>
+                                            <br>
+                                            <div class="input-group">
+                                                <span class="input-group-text inputtext" id="basic-addon1"> Pregunta 1 </span>
+                                                <select class="form-control input">
+                                                    <option>¿Color favorito?</option>
+                                                    <option>¿Tu ciudad favorita?</option>
+                                                    <option>¿El nombre de tu primera mascota?</option>
+                                                    <option>¿Película preferida?</option>
+                                                </select>
+                                                <input type="text " id="pregunta1" class="input">
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text inputtext" id="basic-addon1"> Pregunta 2 </span>
+                                                <select class="form-control input">
+                                                    <option>¿Color favorito?</option>
+                                                    <option>¿Tu ciudad favorita?</option>
+                                                    <option>¿El nombre de tu primera mascota?</option>
+                                                    <option>¿Película preferida?</option>
+                                                </select>
+                                                <input type="text" id="pregunta2" class="input">
+                                            </div>
+                                        </div>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="paginaprincipal.html">
+                                    <button class="btn"> REGISTRARME </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--MODAL1 OLVIDO DE CONTRASEÑA-->
+            <div class="modal fade" id="Olvido" tabindex="-1" role="dialog" aria-labelledby="Olvido" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content olvidoTitulo">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">Recuperar Contraseña </h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body olvido">
                             <div class="row">
-                                <div class="col-4 mt-4">
-                                    <a href="" data-toggle="modal" data-target="#perfilotro">
-                                        <h6 id="profileName" class="chatPerfilNombre"> </h6>
-                                    </a>
-                                </div>
-                                <div class="col-6 mt-5">
-                                    <p class="chatPerfilMensaje"> "Los amo a todos :*" </p>
-                                </div>
-                                <div class="col-2 mt-1">
-                                    <img class="chatPerfilImagen" src="imagenes/imagen-para-perfil.jpg" height="70px" width="70px" alt="">
+                                <div class="col-md-1"> </div>
+                                <div class="col-md-10">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text inputtext" id="basic-addon1">@ </span>
+                                        </div>
+                                        <input type="text" class="form-control input " placeholder="email@ejemplo.com" aria-label="email" aria-describedby="basic-addon1">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div id="Chat" class="container" style="height: 420px; overflow: auto;">
-                            
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="fondo2_2 row-fluid">
-
-                    <div class="botonExtras">
-                        <button class="extra mx-auto" type="button" data-toggle="collapse" data-target="#Extras" aria-expanded="false" aria-controls="collapseExample">
-                            <i class="fa fa-chevron-up"></i>
-                        </button>
-                    </div>
-                    <div class="mensaje input-group">
-                        <textarea id="txtMensaje" class="form-control input" placeholder="Escribe tu mensaje aquí..."></textarea>
-
-                        <div class="input-group-prepend">
-                            <button id="btnEnviar" type="button" class="input form-control"> Enviar</button>
-                        </div>
-                    </div>
-                    <div class="collapse in" id="Extras">
-                        <div class="extracollapse">
-                            <div class="extracollapsefondo"> </div>
-                            <button class="transparent" data-toggle="modal" data-target="#Correo">
-                                <img class="imagenextra" src="imagenes/correo.png" alt="" height="50px"> </button>
-                            <button class="transparent" data-toggle="modal" data-target="#Adjunto">
-                                <img class="imagenextra" src="imagenes/adjuntar.png" alt="" height="50px"> </button>
-                            <button class="transparent" data-toggle="modal" data-target="#Video">
-                                <img class="imagenextra" src="imagenes/video.png" alt="" height="50px"> </button>
-                            <button class="transparent" data-toggle="modal" data-target="#Juego">
-                                <img class="imagenextra" src="imagenes/juego.png" alt="" height="50px"> </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-3 h-100 borde">
-                <div class="fondo3_1">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <h6 class="perfilnombre"> Dann95 </h6>
-                            <span class="mnsaje">" Mi mensaje... "</span>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <img class="perfilimagen" id="perfilImagen" src="imagenes/imagen-perfil.jpg" alt="" height="20%">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group select">
-                            <select class="form-control estado " id="selectEstado">
-                                <option class="estadoDIS" value="g"> Disponible </option>
-                                <option class="estadoOCU" value="r">Ocupado </option>
-                                <option class="estadoAUS" value="y">Ausente </option>
-                                <option class="estadoDES" value="w">Desconectado </option>
-                            </select>
-                        </div>
-                    </div>
-                    <button type="button" class=" btn miperfil" data-toggle="modal" data-target="#miperfil"> Perfil </button>
-                </div>
-                <div class="fondo3_2">
-                    <div class="container lil">
-                        <div class="uus">
-                            <span class="uusNombre"> Juanito </span>
-                            <div class="bolita bolitacolorV">
-                            </div>
-                        </div>
-                        <div class="uus">
-                            <span class="uusNombre"> Mariana </span>
-                            <div class="bolita bolitacolorR">
-                            </div>
-                        </div>
-                        <div class="uus">
-                            <span class="uusNombre"> Deniss </span>
-                            <div class="bolita bolitacolorA">
-                            </div>
-                        </div>
-                        <div class="uus">
-                            <span class="uusNombre"> Rober </span>
-                            <div class="bolita bolitacolorG">
+                            <br>
+                            <div class="modal-footer">
+                                <button type="button" class="btn" data-toggle="modal" data-target="#recuperarContra2" data-dismiss="modal"> SIGUIENTE </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!--MODAL2 OLVIDO DE CONTRASEÑA-->
+            <div class="modal fade" id="recuperarContra2" tabindex="-1" role="dialog" aria-labelledby="recuperarContraseña" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header olvidoTitulo">
+                            <h4 class="modal-title" id="myModalLabel">Recuperar Contraseña </h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body olvido">
+                            <div class="row">
+                                <div class="col-md-1"> </div>
+                                <div class="col-md-10">
+                                    <div class="">
+                                        <span class="input-group-text inputtext" id="basic-addon1">Pregunta1: </span>
+                                        <span class="input-group-text inputtext" id="basic-addon1">¿El nombre de tu primer mascota?</span>
+                                        <input type="text" class="form-control input" aria-label="email" aria-describedby="basic-addon1">
+                                    </div>
+                                    <br>
+                                    <div class="">
+                                        <span class="input-group-text inputtext" id="basic-addon1">Pregunta2 </span>
+                                        <span class="input-group-text inputtext" id="basic-addon1">¿Tu ciudad favorita? </span>
+                                        <input type="text" class="form-control input" aria-label="email" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="modal-footer">
+                                <button type="button" class="btn" data-toggle="modal" data-target="#cambiarContra" data-dismiss="modal"> SIGUIENTE </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--MODAL3 OLVIDO DE CONTRASEÑA-->
+            <div class="modal fade" id="cambiarContra" tabindex="-1" role="dialog" aria-labelledby="recuperarContraseña" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header olvidoTitulo">
+                            <h4 class="modal-title" id="myModalLabel">Recuperar Contraseña </h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body olvido">
+                            <div class="row">
+                                <div class="col-md-1"> </div>
+                                <div class="col-md-10">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text inputtext" id="basic-addon1">Nueva Contraseña</span>
+                                        </div>
+                                        <input type="password" class="form-control input" aria-label="contraseña" aria-describedby="basic-addon1">
+                                    </div>
+                                    <br>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text inputtext" id="basic-addon1"> Confirmar Contraseña</span>
+                                        </div>
+                                        <input type="password" class="form-control input" aria-label="contraseña" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="modal-footer">
+                                <a href="paginaprincipal.html">
+                                    <button class="btn" type="button"> ENTRAR </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
 
-    </div>
+    <!--////////////////////////////////////////////PAGINA_PRINCIPAL///////////////////////////////////////////////-->
+    <!--////////////////////////////////////////////PAGINA_PRINCIPAL///////////////////////////////////////////////-->
+    <!--////////////////////////////////////////////PAGINA_PRINCIPAL///////////////////////////////////////////////-->
+    <!--////////////////////////////////////////////PAGINA_PRINCIPAL///////////////////////////////////////////////-->
+    <!--////////////////////////////////////////////PAGINA_PRINCIPAL///////////////////////////////////////////////-->
+    <div id="divPaginaPrincipal" style="padding: 0% !important">
+        <nav class="navv navbar navbar-expand-lg navbar-dark navLogo col-sm-12">
+            <a class=" navbar-brand" href="#">
+                <!--<img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png" width="100" height="80" alt "">-->
+                <span class="lead">
+                    <strong> ComuniK2 </strong>
+                </span>
+            </a>
+            <!-- boton de configuración, aparece al hacer pequeña la pantalla-->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-    <!--MODAL CORREO-->
-    <div class="modal fade" id="Correo" tabindex="-1" role="dialog" aria-labelledby="perfil" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
+            <!--DROPDOWN MENU-->
+            <!--ML-auto para alinear a la derecha-->
+            <div class="collapse navbar-collapse pull-md-right" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <a href="#">
+                        <button class="btn" data-toggle="modal" data-target="#Info"> Sobre Nosotros </button>
+                    </a>
+                    <div class="hola"> </div>
+                    <a href="iniciosesion.html">
+                        <button class="btn"> Cerrar Sesion </button>
+                    </a </ul>
 
+            </div>
+        </nav>
+
+
+        <div class="container-fluid mt-2">
+            <div class="row h-100 ">
+
+
+                <div class="col-3 h-100 borde">
+                    <div id="conversationPanel" class="fondo1">
+
+                    </div>
+                </div>
+                <div class="col-6 h-100 borde no-gutters">
+                    <div class="fondo2_1">
+                        <div class="chatPerfil">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-4 mt-4">
+                                        <a href="" data-toggle="modal" data-target="#perfilotro">
+                                            <h6 id="profileName" class="chatPerfilNombre"> </h6>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 mt-5">
+                                        <p class="chatPerfilMensaje"> "Los amo a todos :*" </p>
+                                    </div>
+                                    <div class="col-2 mt-1">
+                                        <img class="chatPerfilImagen" src="imagenes/imagen-para-perfil.jpg" height="70px" width="70px" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="Chat" class="container" style="height: 420px; overflow: auto;">
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="fondo2_2 row-fluid">
+
+                        <div class="botonExtras">
+                            <button class="extra mx-auto" type="button" data-toggle="collapse" data-target="#Extras" aria-expanded="false" aria-controls="collapseExample">
+                                <i class="fa fa-chevron-up"></i>
+                            </button>
+                        </div>
+                        <div class="mensaje input-group">
+                            <textarea id="txtMensaje" class="form-control input" placeholder="Escribe tu mensaje aquí..."></textarea>
+
+                            <div class="input-group-prepend">
+                                <button id="btnEnviar" type="button" class="input form-control"> Enviar</button>
+                            </div>
+                        </div>
+                        <div class="collapse in" id="Extras">
+                            <div class="extracollapse">
+                                <div class="extracollapsefondo"> </div>
+                                <button class="transparent" data-toggle="modal" data-target="#Correo">
+                                    <img class="imagenextra" src="imagenes/correo.png" alt="" height="50px"> </button>
+                                <button class="transparent" data-toggle="modal" data-target="#Adjunto">
+                                    <img class="imagenextra" src="imagenes/adjuntar.png" alt="" height="50px"> </button>
+                                <button class="transparent" data-toggle="modal" data-target="#Video">
+                                    <img class="imagenextra" src="imagenes/video.png" alt="" height="50px"> </button>
+                                <button class="transparent" data-toggle="modal" data-target="#Juego">
+                                    <img class="imagenextra" src="imagenes/juego.png" alt="" height="50px"> </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3 h-100 borde">
+                    <div class="fondo3_1">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h6 id="NombrePerfil" class="perfilnombre"> Dann95 </h6>
+                                <span class="mnsaje">" Mi mensaje... "</span>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <img class="perfilimagen" id="perfilImagen" src="imagenes/imagen-perfil.jpg" alt="" height="20%">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group select">
+                                <select class="form-control estado " id="selectEstado">
+                                    <option class="estadoDIS" value="g"> Disponible </option>
+                                    <option class="estadoOCU" value="r">Ocupado </option>
+                                    <option class="estadoAUS" value="y">Ausente </option>
+                                    <option class="estadoDES" value="w">Desconectado </option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" class=" btn miperfil" data-toggle="modal" data-target="#miperfil"> Perfil </button>
+                    </div>
+                    <div class="fondo3_2">
+
+                        <div id="UsuariosConectados" class="container lil">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!--MODAL CORREO-->
+        <div class="modal fade" id="Correo" tabindex="-1" role="dialog" aria-labelledby="perfil" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--MODAL PERFIL-->
+        <div class="modal fade" id="perfil" tabindex="-1" role="dialog" aria-labelledby="perfil" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- MODAL INFO -->
+        <div class="modal fade" id="Info" tabindex "-1" role="dialog" aria-labelledby="Info" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content info">
+                    <div class="modal-header">
+                        <h4 class="modal-tittle"> POI - Proyecto Final. </h4>
+                    </div>
+                    <div class="modal-body" align="center">
+                        <h6> Universidad Autonoma de Nuevo León. </h6>
+                        <h6> Facultad de Ciencias Fisico Matemáticas. </h6>
+                        <h6> Lic. Multimedia y Animación Digital. </h6>
+                        <br>
+                        <h5> Programación Orientada a Internet </h5>
+                        <h5> Proyecto Final. </h5>
+                        <br>
+                        <h6> EQUIPO </h6>
+                        <p> PROGRAMADOR BACK-END: Brayan Zavala.</p>
+                        <p> PROGRAMADOR FRONT-END: Daniela Cantú.</p>
+                        <br>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!--MODAL PERFIL-->
-    <div class="modal fade" id="perfil" tabindex="-1" role="dialog" aria-labelledby="perfil" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-
-                </div>
-                <div class="modal-body">
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- MODAL INFO -->
-    <div class="modal fade" id="Info" tabindex "-1" role="dialog" aria-labelledby="Info" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content info">
-                <div class="modal-header">
-                    <h4 class="modal-tittle"> POI - Proyecto Final. </h4>
-                </div>
-                <div class="modal-body" align="center">
-                    <h6> Universidad Autonoma de Nuevo León. </h6>
-                    <h6> Facultad de Ciencias Fisico Matemáticas. </h6>
-                    <h6> Lic. Multimedia y Animación Digital. </h6>
-                    <br>
-                    <h5> Programación Orientada a Internet </h5>
-                    <h5> Proyecto Final. </h5>
-                    <br>
-                    <h6> EQUIPO </h6>
-                    <p> PROGRAMADOR BACK-END: Brayan Zavala.</p>
-                    <p> PROGRAMADOR FRONT-END: Daniela Cantú.</p>
-                    <br>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </body>
 
 </html>

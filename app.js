@@ -16,7 +16,7 @@ app.use("/", express.static(__dirname + "/"))
 
 
 app.get('/', function(req, res){
-    res.sendFile(__dirname + '/iniciosesion.html');
+    res.sendFile(__dirname + '/paginaprincipal.html');
 });
 
 
@@ -37,43 +37,61 @@ io.sockets.on('connection', function(socket){
         connections.splice(connections.indexOf(socket), 1);
         console.log('Desconexion: %s sockets conectados', connections.length);
 
-    })
-
-    //Enviando mensajes
-    socket.on('send message', function(data){
-        
-        console.log(data);
-        io.sockets.emit('new message', {msg: data, user: socket.username });
     });
 
     //Agregando usuarios
-    socket.on('logIn', function(data, callback){
+    socket.on('log-In', function(data, callback){
         //callback(true);
-        socket.username = data.user;
-        users.push({user: socket.username, socketId: data.socketId});
-        console.log("El usuario " + data.user + " se ha logueado");
-        
+        //Aqui ira una pequeña logica de BD
 
-        io.to(data.socketId).emit('redirect',{page:'/paginaprincipal.html', user: data.user, socketId: data.socketId});
-       // updateUserNames();
+        socket.username = data.user;
+        console.log("El usuario " + data.user + " se ha logueado");
+        users.push({user: socket.username,Estado: data.Estado ,socketId: data.socketId});
+
+        updateUserNames();
     })
 
-    socket.on('changeId', data =>{
+    socket.on('update state', data =>{
 
-        
         for(var i = 0; i < users.length; i++)
         {
             if(users[i].user == data.user)
-            {
-                users[i].socketId = data.id;
-                console.log("El usuario " + data.user + " ha cambiado su Id");
-            }
+                users[i].Estado = data.Estado;
         }
+
+        updateUserNames();
+    });
+
+    socket.on('send message', data =>{
+
+        var dstSocket = searchSocketByName(data.dst);
+
+        if(dstSocket.length < 1)
+            return;
+
+        io.to(dstSocket).emit('receive message', {orig: data.orig, message: data.msg});
+    });
+
+    socket.on('set session', data =>{
+
+       
+        console.log("Sesion iniciada correctamente");
 
     })
 
     function updateUserNames()
     {
         io.sockets.emit('get users', users);
+    }
+
+    function searchSocketByName(userName)
+    {
+        for(var i = 0; i < users.length; i++)
+        {
+            if(users[i].user == userName)
+                return users[i].socketId;
+        }
+
+        return "";
     }
 });
